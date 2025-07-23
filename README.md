@@ -1,159 +1,92 @@
-<!-- <p align="center">
-<img align="center" src="http://ForTheBadge.com/images/badges/built-with-love.svg"> <img align="center" src="http://ForTheBadge.com/images/badges/makes-people-smile.svg"> <img align="center" src="http://ForTheBadge.com/images/badges/built-by-developers.svg">
-</p>
+# Laravel Application with Apache Load Balancer and CI/CD
 
-# Laravel Travel App Platform
+This project demonstrates deploying a Laravel application across two frontend servers, with an Apache reverse proxy load balancer and CI/CD pipeline using Jenkins and GitHub webhook.
 
-This is a travel app platform I made mostly using Laravel ^8.12 -->
+[![Laravel](https://img.shields.io/badge/Laravel-v8+-red)](https://laravel.com)  
+[![Apache](https://img.shields.io/badge/Apache-HTTP--Server-blue)](https://httpd.apache.org)  
+[![Jenkins](https://img.shields.io/badge/Jenkins-CI/CD-yellow)](https://www.jenkins.io)  
+[![GitHub](https://img.shields.io/badge/GitHub-Webhook-black)](https://docs.github.com/en/webhooks)
 
-<h1 align="center">
-RelaxArc Travel
-</h1>
+---
 
-<h5 align="center">
-Laravel Travel App Platform.
-</h5>
+## Project Overview
 
-<p align="center">
-    <a href="https://github.com/muhammadhabibfery/relaxarc-travel/actions/workflows/test.yml">
-    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/muhammadhabibfery/relaxarc-travel/test.yml?logo=github">
-    <a href="https://www.php.net">
-        <img src="https://img.shields.io/badge/php-%3E%3D8.1-%23777BB4" />
-    </a>
-    <a href="https://laravel.com">
-        <img src="https://img.shields.io/badge/laravel-8.x-%23EC4E3D" />
-    </a>
-</p>
+- Two Laravel frontend servers:
+  - FE1: `54.176.172.183:9091`
+  - FE2: `54.176.56.42:9092`
+- Apache reverse proxy server (load balancer): `54.176.139.180`
+- Jenkins CI/CD pipeline automatically deploys code on both frontends when changes are pushed to GitHub.
 
-</br>
+Requests to the proxy server (`54.176.139.180`) are distributed in a round-robin fashion to FE1 and FE2.
 
-| [Frontend Features][] | [Admin Panel Features][] | [Requirements][] | [Install][] | [How to setting][] | [DB Structure][] | [License][] |
+---
 
-## Frontend Features 
-<img src="public/assets/front-1.png" alt="Preview"/>
-<img src="public/assets/front-2.png" alt="Preview"/>
-<img src="public/assets/front-3.png" alt="Preview"/>
-<hr>
-<img src="public/assets/front-4.png" alt="Preview"/>
-<hr>
-<img src="public/assets/front-5.png" alt="Preview"/>
-<hr>
-<img src="public/assets/front-6.png" alt="Preview"/>
-<hr>
-<img src="public/assets/front-7.png" alt="Preview"/>
-<hr>
-<img src="public/assets/front-8.png" alt="Preview"/>
+## Architecture
+                +-------------------------+
+                |       GitHub Repo      |
+                +-------------------------+
+                         |
+                         | Webhook
+                         v
+                +-------------------------+
+                |         Jenkins         |
+                +-------------------------+
+                         |
+            +------------+------------+
+            |                         |
+ +--------------------+    +--------------------+
+ |        FE1         |    |        FE2         |
+ | Laravel on :9091   |    | Laravel on :9092   |
+ +--------------------+    +--------------------+
+            ^                         ^
+            +------------+------------+
+                         |
+                +-------------------------+
+                |  Apache Load Balancer  |
+                |         :80            |
+                +-------------------------+
+                
+---
 
-#### Features
+## Tech Stack
 
-- <b> Home
-- <b> Travel Packages
-- <b> Travel Package Detail
-- <b> Checkout
-- <b> Payment
-- <b> Change Profile and Password
-- <b> Contact
+- Laravel 8+
+- Apache HTTP Server (frontend & proxy)
+- PHP 8
+- SQLite (file-based, persistent)
+- Jenkins (pipeline)
+- GitHub (source & webhook)
 
-## Admin Panel Features 
-<img src="public/assets/admin-panel.png" alt="Preview"/>
+---
 
-|<h3>Menu  </h3>       |       Description                                                                  |
-|-----------------------|-----------------------------------------------------------------------------------|
-|<b>Dashboard           | </b>Contains information about all menu.                                          |
-|<b>User Management     | </b>Manage members and employees.                                                 |
-|<b>Travel Package      | </b>Manage all types of travel packages.                                          |
-|<b>Travel Gallery      | </b>Manage images for each type of travel package.                                |
-|<b>Transaction         | </b>Manage transaction for each type of travel package.                           |
-|<b>Profile             | </b>Edit user's profile and password.                                             |
+## Features
 
-## Requirements
+- Reverse proxy using Apache `mod_proxy_balancer`.
+- Load balancing between two Laravel servers in round-robin.
+- Persistent SQLite database pre-seeded with migrations and data.
+- CI/CD pipeline with Jenkins deploying to both FE1 and FE2 automatically.
 
-	PHP = ^7.3|^8.0
-    laravel = ^8.12
-    laravel-ui = ^3.2
-    filament/filament = ^2.0
-    intervention/image = ^2.5
-    midtrans/midtrans-php = ^2.5
-    barryvdh/laravel-debugbar: ^3.5
+---
 
-## Install
+## How to Deploy
 
-Clone repo
-
-```
-git clone https://github.com/muhammadhabibfery/relaxarc-travel.git
-```
-
-Install Composer
+### 1. Clone this repo
+```bash
+git clone https://github.com/your-org/your-repo.git
 
 
-[Download Composer](https://getcomposer.org/download/)
 
+---
 
-composer update/install 
+### Downloadable `.md` file:
 
-```
-composer install
-```
+I’ve saved this as a file:  
 
-Install Nodejs
+⬇️ [Download README.md](sandbox:/mnt/data/README.md)
 
+Let me know if you’d also like me to prepare the `Jenkinsfile` or a `.gitignore` to include in your repo.
 
-[Download Node.js](https://nodejs.org/en/download/)
-
-
-NPM dependencies
-```
-npm install
-```
-
-Using Laravel Mix 
-
-```
-npm run dev
-```
-
-## How to setting 
-
-Go into .env file change Database and Email credentials.
-Then setup the midtrans (Payment Gateway) with your credentials
-```
-MIDTRANS_SERVER_KEY = <Your-Server-Key>
-MIDTRANS_PRODUCTION = false
-MIDTRANS_SANITIZED = true
-MIDTRANS_3DS = true|false
-```
-
-Run the migration
-
-```
-php artisan migrate
-```
-
-Or run the migration with seeder if you want seeding the related data
-
-```
-php artisan migrate --seed
-```
-
-Generate a New Application Key
-
-```
-php artisan key:generate
-```
-
-Create a symbolic link
-
-```
-php artisan storage:link
-```
-
-## Database Structure
-<img src="public/assets/erd.png" alt="Database Structure">
-
-
-## License
-
+---
 > Copyright (C) 2022 Muhammad Habib Fery.  
 **[⬆ back to top](#laravel-travel-app-platform)**
 
