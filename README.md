@@ -6,6 +6,7 @@ This project demonstrates deploying a Laravel application across two frontend se
 [![Apache](https://img.shields.io/badge/Apache-HTTP--Server-blue)](https://httpd.apache.org)  
 [![Jenkins](https://img.shields.io/badge/Jenkins-CI/CD-yellow)](https://www.jenkins.io)  
 [![GitHub](https://img.shields.io/badge/GitHub-Webhook-black)](https://docs.github.com/en/webhooks)
+[![AWS](https://img.shields.io/badge/AWS-EC2-orange)](https://aws.amazon.com/ec2/)
 
 ---
 
@@ -22,29 +23,25 @@ Requests to the proxy server (`54.176.139.180`) are distributed in a round-robin
 ---
 
 ## Architecture
-                +-------------------------+
-                |       GitHub Repo      |
-                +-------------------------+
-                         |
-                         | Webhook
-                         v
-                +-------------------------+
-                |         Jenkins         |
-                +-------------------------+
-                         |
-            +------------+------------+
-            |                         |
- +--------------------+    +--------------------+
- |        FE1         |    |        FE2         |
- | Laravel on :9091   |    | Laravel on :9092   |
- +--------------------+    +--------------------+
-            ^                         ^
-            +------------+------------+
-                         |
-                +-------------------------+
-                |  Apache Load Balancer  |
-                |         :80            |
-                +-------------------------+
+
+```mermaid
+graph TD
+    A[GitHub Repo] -->|Webhook| B[Jenkins]
+
+    B --> C1[FE1<br>Laravel<br>:9091]
+    B --> C2[FE2<br>Laravel<br>:9092]
+
+    C1 --> D[Apache Load Balancer<br>:80]
+    C2 --> D
+
+    D -->|Round Robin| C1
+    D -->|Round Robin| C2
+
+### Rendered Diagram Description:
+- **GitHub Repo** triggers **Jenkins** via a webhook.
+- **Jenkins** deploys to both FE1 and FE2.
+- FE1 and FE2 are both Laravel apps running on different ports.
+- The **Apache Load Balancer** (on port 80) distributes requests to FE1 and FE2 in round-robin fashion.
                 
 ---
 
@@ -65,26 +62,6 @@ Requests to the proxy server (`54.176.139.180`) are distributed in a round-robin
 - Load balancing between two Laravel servers in round-robin.
 - Persistent SQLite database pre-seeded with migrations and data.
 - CI/CD pipeline with Jenkins deploying to both FE1 and FE2 automatically.
-
----
-
-## How to Deploy
-
-### 1. Clone this repo
-```bash
-git clone https://github.com/your-org/your-repo.git
-
-
-
----
-
-### Downloadable `.md` file:
-
-I’ve saved this as a file:  
-
-⬇️ [Download README.md](sandbox:/mnt/data/README.md)
-
-Let me know if you’d also like me to prepare the `Jenkinsfile` or a `.gitignore` to include in your repo.
 
 ---
 > Copyright (C) 2022 Muhammad Habib Fery.  
