@@ -31,6 +31,9 @@ graph TD
     B --> C2[FE2: Laravel :9092]
     D[Apache Load Balancer :80] -->|Round Robin| C1
     D -->|Round Robin| C2
+
+
+
 ---
 ### Rendered Diagram Description:
 - **GitHub Repo** triggers **Jenkins** via a webhook.
