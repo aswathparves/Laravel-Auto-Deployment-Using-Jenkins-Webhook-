@@ -27,16 +27,11 @@ Requests to the proxy server (`54.176.139.180`) are distributed in a round-robin
 ```mermaid
 graph TD
     A[GitHub Repo] -->|Webhook| B[Jenkins]
-
-    B --> C1[FE1<br>Laravel<br>:9091]
-    B --> C2[FE2<br>Laravel<br>:9092]
-
-    C1 --> D[Apache Load Balancer<br>:80]
-    C2 --> D
-
-    D -->|Round Robin| C1
+    B --> C1[FE1: Laravel :9091]
+    B --> C2[FE2: Laravel :9092]
+    D[Apache Load Balancer :80] -->|Round Robin| C1
     D -->|Round Robin| C2
-
+---
 ### Rendered Diagram Description:
 - **GitHub Repo** triggers **Jenkins** via a webhook.
 - **Jenkins** deploys to both FE1 and FE2.
