@@ -21,20 +21,6 @@ This project demonstrates deploying a Laravel application across two frontend se
 Requests to the proxy server (`54.176.139.180`) are distributed in a round-robin fashion to FE1 and FE2.
 
 ---
-
-## Architecture
-
-```mermaid
-graph TD
-    A[GitHub Repo] -->|Webhook| B[Jenkins]
-    B --> C1[FE1: Laravel :9091]
-    B --> C2[FE2: Laravel :9092]
-    D[Apache Load Balancer :80] -->|Round Robin| C1
-    D -->|Round Robin| C2
-
-
-
----
 ### Rendered Diagram Description:
 - **GitHub Repo** triggers **Jenkins** via a webhook.
 - **Jenkins** deploys to both FE1 and FE2.
@@ -72,3 +58,17 @@ graph TD
 [How to setting]:#how-to-setting
 [DB Structure]:#database-structure
 [License]:#license
+
+
+
+
+
+## Architecture
+
+```mermaid
+graph TD
+    A[GitHub Repo] -->|Webhook| B[Jenkins]
+    B --> C1[FE1: Laravel :9091]
+    B --> C2[FE2: Laravel :9092]
+    D[Apache Load Balancer :80] -->|Round Robin| C1
+    D -->|Round Robin| C2
